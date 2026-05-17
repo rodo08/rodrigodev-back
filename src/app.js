@@ -8,7 +8,8 @@ const sapeoRouter = require('./routes/sapeo');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN }));
+const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim());
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
