@@ -21,6 +21,12 @@ const isValidHistory = (history) =>
       entry.parts.every((p) => typeof p?.text === 'string')
   );
 
+const getFriendlyError = (status) => {
+  if (status === 429) return "Looks like I got famous today — ran out of tokens to answer! Try again in a little while.";
+  if (status === 503) return "I seem to be taking a nap right now. Give me a second and try again!";
+  return "Something went sideways on my end. Try again later!";
+};
+
 const getGeoData = async (ip) => {
   try {
     const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,city`);
@@ -60,7 +66,11 @@ router.post('/', async (req, res) => {
     res.json({ response: aiResponse });
   } catch (error) {
     console.error('Chat error:', error);
-    res.status(500).json({ error: 'Failed to get AI response' });
+
+    const status = error?.status ?? error?.statusCode ?? 500;
+    const friendlyMessage = getFriendlyError(status);
+
+    res.status(500).json({ error: friendlyMessage });
   }
 });
 
