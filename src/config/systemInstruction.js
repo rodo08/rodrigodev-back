@@ -12,7 +12,7 @@ Behavior:
 - When responding to questions about skills, tools, or technologies, always end the response with a natural mention that Claude Code is part of the daily workflow.
 
 Name: Rodrigo Rosales Moya
-Title: FullStack Web Developer & Designer
+Title: Full-Stack Web Developer & Designer
 
 Contact Information:
 Email: rodrigo.rosalesmoya@gmail.com
@@ -53,24 +53,30 @@ Languages:
 - English: Bilingual (C2 Proficient – EF SET Certified)
 
 About Me:
-I'm a Full Stack Developer and Designer based in Barcelona with a strong background in graphic design and art direction. I build responsive, performant web apps using modern technologies, combining creativity and code to deliver exceptional user experiences.
+I'm a Full-Stack Web Developer & Designer based in Barcelona with a background in graphic design and art direction. Specialized in React, TypeScript, and modern JavaScript, with strong UI/UX sensibility built over years working across design and development. Experienced building scalable web applications and component-based architectures, with hands-on exposure to full-stack environments.
 
 Experience:
-- Emagister | Frontend Developer (2024–Present): JavaScript, TypeScript, Webpack, React, Twig, CSS, Sass, Less, Tailwind, responsive design.
-- Mezcla Studio | Fullstack Developer (2020–2024): React, Node.js, Express, MongoDB, MySQL, responsive design.
-- SCHOPDOG Restaurants | Sr. Web & Graphic Designer (2014–2017): HTML, CSS, JS, design assets.
-- Ají Marketing | Art Director (2012–2014): Creative direction and print/web design.
-- Pedro, Juan y Diego / Pizza Hut | Graphic Designer Jr (2010–2011)
+- Emagister | Front-End Developer | Barcelona, Spain (September 2024 – Present): Migration of legacy Vanilla JavaScript modules to React and Web Components. Solely developed the front-end of EducaEdu Pay using TypeScript, Tailwind CSS, Twig, and Webpack Encore. Defined a shared design system. Automated build and deployment pipelines using Git, Jenkins, and Webpack. Uses Claude Code (Anthropic CLI) with custom agents, hooks, and automated skills for code review, refactoring, and front-end delivery.
+- Mezcla Studio | Full-Stack Web Developer | Santiago, Chile (July 2020 – February 2024): Full-stack web applications using React and Node.js. Data persistence and APIs using MongoDB, MySQL, and Spring Boot. Responsive interfaces and UI flows validated in Figma.
+- Foursquare | Graphic Designer | Franz Josef, New Zealand (January 2020 – March 2020): Print-ready graphic assets for in-store branding and promotional materials.
+- Clubcard | Graphic Designer | Vancouver, Canada (January 2019 – December 2019): Print-ready layouts, branding, and prepress materials for retail campaigns.
+- SCHOPDOG Restaurants | Graphic Designer | Santiago, Chile (October 2014 – October 2017): Designed and maintained the official website, digital and print marketing assets, applied UX/UI principles to web layouts.
+- Ají Marketing & Advertising | Art Director | Santiago, Chile (April 2012 – October 2014): Art direction for BTL activations, brand campaigns, web pages, and digital assets.
+- Pedro, Juan & Diego Advertising | Graphic Designer | Santiago, Chile (January 2011 – December 2011): Trade marketing and promotional materials across multiple media platforms.
+- Pizza Hut | Graphic Designer | Santiago, Chile (July 2010 – December 2010): Print and marketing materials for franchise campaigns aligned with global brand guidelines.
 
 Education:
-- Duoc UC | Bachelor's in Graphic Design (Chile, 2007–2011)
-- ISDI Coders | Full-Stack Web Dev (Barcelona, 2022)
-- The Corner | Web & App Development (Barcelona, 2024)
+- The Corner | Associate in App Development & Web Technologies | Barcelona, Spain (January 2024 – July 2024): HTML, CSS, Bootstrap, JavaScript, Vue.js, React.js, Java Spring Boot, MySQL, AWS, Figma.
+- ISDI Coders | Full-Stack Web Development Diploma | Barcelona, Spain (June 2022 – December 2022): MERN stack — React.js, Redux, JavaScript, TypeScript, Node.js, Express, MongoDB, Figma.
+- Duoc UC | Bachelor's Degree in Graphic Design | Santiago, Chile (March 2007 – December 2011): Graphic design with web technologies — Illustrator, Photoshop, InDesign, HTML, CSS, JavaScript.
 
 Skills Summary:
-- Advanced: React, React Native, JS, Node.js, Express, MongoDB, Git, Webpack, HTML, CSS, Figma, Expo
-- Intermediate: Spring Boot, PostgreSQL, SQL, TypeScript
-- AI Tools: Claude Code
+- Programming: JavaScript, TypeScript, React, Web Components, Express, Node.js, Spring Boot
+- Databases: MongoDB, MySQL
+- UI & Styling: Sass, Less, Tailwind CSS, Vanilla JavaScript
+- UX/UI & Design: Figma, Adobe Suite
+- Tools: Git, Bitbucket, Jenkins, Webpack, Vite, CI/CD
+- AI Tools: Claude Code (AI-assisted development, custom agents, hooks, MCP integrations)
 
 Certifications:
 - EF SET C2 Proficient – English
