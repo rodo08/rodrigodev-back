@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const chatRouter = require('./routes/chat');
 const sapeoRouter = require('./routes/sapeo');
+const visitsRouter = require('./routes/visits');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/chat', chatRouter);
+app.use('/api/visits', visitsRouter);
 app.use('/sapeo', sapeoRouter);
 
 const keepAlive = () => {
