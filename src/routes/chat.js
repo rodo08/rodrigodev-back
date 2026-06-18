@@ -47,6 +47,7 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Invalid history format' });
   }
 
+  // La IP se usa solo de paso para obtener el país/ciudad; nunca se almacena.
   const ip =
     req.headers['x-forwarded-for']?.split(',')[0].trim() ||
     req.socket.remoteAddress;
@@ -61,7 +62,7 @@ router.post('/', async (req, res) => {
 
     const aiResponse = result.response.text();
 
-    await ChatLog.create({ ip, country: geo.country, city: geo.city, message, response: aiResponse });
+    await ChatLog.create({ country: geo.country, city: geo.city, message, response: aiResponse });
 
     res.json({ response: aiResponse });
   } catch (error) {

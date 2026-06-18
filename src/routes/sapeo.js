@@ -1,5 +1,6 @@
 const express = require('express');
 const ChatLog = require('../models/ChatLog');
+const Visit = require('../models/Visit');
 
 const router = express.Router();
 
@@ -15,7 +16,8 @@ router.get('/logs', authMiddleware, async (req, res) => {
   try {
     const logs = await ChatLog.find().sort({ createdAt: -1 }).limit(500);
     const total = await ChatLog.countDocuments();
-    res.json({ total, logs });
+    const visits = await Visit.countDocuments();
+    res.json({ total, visits, logs });
   } catch (error) {
     console.error('Sapeo error:', error);
     res.status(500).json({ error: 'Failed to fetch logs' });
@@ -162,12 +164,12 @@ router.get('/', (req, res) => {
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-value" id="totalCount">—</div>
-        <div class="stat-label">mensajes totales</div>
+        <div class="stat-value" id="visitsCount">—</div>
+        <div class="stat-label">visitas únicas</div>
       </div>
       <div class="stat">
-        <div class="stat-value" id="uniqueIps">—</div>
-        <div class="stat-label">IPs únicas</div>
+        <div class="stat-value" id="totalCount">—</div>
+        <div class="stat-label">mensajes totales</div>
       </div>
       <div class="stat">
         <div class="stat-value" id="countries">—</div>
@@ -181,14 +183,13 @@ router.get('/', (req, res) => {
           <tr>
             <th>#</th>
             <th>Fecha</th>
-            <th>IP</th>
             <th>País / Ciudad</th>
             <th>Mensaje</th>
             <th>Respuesta</th>
           </tr>
         </thead>
         <tbody id="logsBody">
-          <tr><td colspan="6" class="loading">Cargando...</td></tr>
+          <tr><td colspan="5" class="loading">Cargando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -236,16 +237,16 @@ router.get('/', (req, res) => {
       }
     });
 
-    function renderDashboard({ total, logs }) {
+    function renderDashboard({ total, visits, logs }) {
+      document.getElementById('visitsCount').textContent = visits ?? '—';
       document.getElementById('totalCount').textContent = total;
-      document.getElementById('uniqueIps').textContent = new Set(logs.map(l => l.ip)).size;
       document.getElementById('countries').textContent = new Set(logs.map(l => l.country)).size;
       document.getElementById('lastUpdated').textContent =
         'Última actualización: ' + new Date().toLocaleString('es-ES');
 
       const tbody = document.getElementById('logsBody');
       if (!logs.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="loading">Sin registros aún.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="loading">Sin registros aún.</td></tr>';
         return;
       }
 
@@ -253,7 +254,6 @@ router.get('/', (req, res) => {
         <tr>
           <td>\${i + 1}</td>
           <td><span class="tag">\${new Date(log.createdAt).toLocaleString('es-ES')}</span></td>
-          <td><span class="tag">\${log.ip ?? '—'}</span></td>
           <td>\${log.country ?? '—'}<br><small style="color:#888">\${log.city ?? ''}</small></td>
           <td><span class="truncate" title="\${log.message}">\${log.message}</span></td>
           <td><span class="truncate" title="\${log.response ?? ''}">\${log.response ?? '—'}</span></td>
