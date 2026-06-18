@@ -1,5 +1,6 @@
 const express = require('express');
 const ChatLog = require('../models/ChatLog');
+const Visit = require('../models/Visit');
 
 const router = express.Router();
 
@@ -15,7 +16,8 @@ router.get('/logs', authMiddleware, async (req, res) => {
   try {
     const logs = await ChatLog.find().sort({ createdAt: -1 }).limit(500);
     const total = await ChatLog.countDocuments();
-    res.json({ total, logs });
+    const visits = await Visit.countDocuments();
+    res.json({ total, visits, logs });
   } catch (error) {
     console.error('Sapeo error:', error);
     res.status(500).json({ error: 'Failed to fetch logs' });
@@ -162,6 +164,10 @@ router.get('/', (req, res) => {
 
     <div class="stats">
       <div class="stat">
+        <div class="stat-value" id="visitsCount">—</div>
+        <div class="stat-label">visitas únicas</div>
+      </div>
+      <div class="stat">
         <div class="stat-value" id="totalCount">—</div>
         <div class="stat-label">mensajes totales</div>
       </div>
@@ -231,7 +237,8 @@ router.get('/', (req, res) => {
       }
     });
 
-    function renderDashboard({ total, logs }) {
+    function renderDashboard({ total, visits, logs }) {
+      document.getElementById('visitsCount').textContent = visits ?? '—';
       document.getElementById('totalCount').textContent = total;
       document.getElementById('countries').textContent = new Set(logs.map(l => l.country)).size;
       document.getElementById('lastUpdated').textContent =
