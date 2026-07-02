@@ -7,7 +7,7 @@ const router = express.Router();
 
 const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAi.getGenerativeModel({
-  model: 'gemini-2.5-flash-lite',
+  model: 'gemini-flash-lite-latest',
   systemInstruction,
 });
 
@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
     const status = error?.status ?? error?.statusCode ?? 500;
     const friendlyMessage = getFriendlyError(status);
 
-    res.status(500).json({ error: friendlyMessage });
+    res.status(status).json({ error: friendlyMessage });
   }
 });
 
