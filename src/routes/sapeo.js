@@ -1,6 +1,8 @@
 const express = require('express');
 const ChatLog = require('../models/ChatLog');
 const Visit = require('../models/Visit');
+const ContactMessage = require('../models/ContactMessage');
+const CvDownload = require('../models/CvDownload');
 
 const router = express.Router();
 
@@ -15,9 +17,14 @@ const authMiddleware = (req, res, next) => {
 router.get('/logs', authMiddleware, async (req, res) => {
   try {
     const logs = await ChatLog.find().sort({ createdAt: -1 }).limit(500);
+    const messages = await ContactMessage.find()
+      .sort({ createdAt: -1 })
+      .limit(500);
     const total = await ChatLog.countDocuments();
     const visits = await Visit.countDocuments();
-    res.json({ total, visits, logs });
+    const messagesTotal = await ContactMessage.countDocuments();
+    const cvDownloads = await CvDownload.countDocuments();
+    res.json({ total, visits, logs, messages, messagesTotal, cvDownloads });
   } catch (error) {
     console.error('Sapeo error:', error);
     res.status(500).json({ error: 'Failed to fetch logs' });
@@ -175,6 +182,14 @@ router.get('/', (req, res) => {
         <div class="stat-value" id="countries">—</div>
         <div class="stat-label">países</div>
       </div>
+      <div class="stat">
+        <div class="stat-value" id="messagesCount">—</div>
+        <div class="stat-label">mensajes de contacto</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="cvCount">—</div>
+        <div class="stat-label">descargas de CV</div>
+      </div>
     </div>
 
     <div class="table-wrap">
@@ -190,6 +205,25 @@ router.get('/', (req, res) => {
         </thead>
         <tbody id="logsBody">
           <tr><td colspan="5" class="loading">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 style="margin:2rem 0 1rem">Mensajes de contacto</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Asunto</th>
+            <th>Mensaje</th>
+          </tr>
+        </thead>
+        <tbody id="messagesBody">
+          <tr><td colspan="6" class="loading">Cargando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -237,20 +271,18 @@ router.get('/', (req, res) => {
       }
     });
 
-    function renderDashboard({ total, visits, logs }) {
+    function renderDashboard({ total, visits, logs, messages = [], messagesTotal = 0, cvDownloads = 0 }) {
       document.getElementById('visitsCount').textContent = visits ?? '—';
       document.getElementById('totalCount').textContent = total;
       document.getElementById('countries').textContent = new Set(logs.map(l => l.country)).size;
+      document.getElementById('messagesCount').textContent = messagesTotal;
+      document.getElementById('cvCount').textContent = cvDownloads;
       document.getElementById('lastUpdated').textContent =
         'Última actualización: ' + new Date().toLocaleString('es-ES');
 
       const tbody = document.getElementById('logsBody');
-      if (!logs.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="loading">Sin registros aún.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = logs.map((log, i) => \`
+      tbody.innerHTML = logs.length
+        ? logs.map((log, i) => \`
         <tr>
           <td>\${i + 1}</td>
           <td><span class="tag">\${new Date(log.createdAt).toLocaleString('es-ES')}</span></td>
@@ -258,7 +290,22 @@ router.get('/', (req, res) => {
           <td><span class="truncate" title="\${log.message}">\${log.message}</span></td>
           <td><span class="truncate" title="\${log.response ?? ''}">\${log.response ?? '—'}</span></td>
         </tr>
-      \`).join('');
+      \`).join('')
+        : '<tr><td colspan="5" class="loading">Sin registros aún.</td></tr>';
+
+      const msgBody = document.getElementById('messagesBody');
+      msgBody.innerHTML = messages.length
+        ? messages.map((m, i) => \`
+        <tr>
+          <td>\${i + 1}</td>
+          <td><span class="tag">\${new Date(m.createdAt).toLocaleString('es-ES')}</span></td>
+          <td>\${m.name || '—'}</td>
+          <td>\${m.email}</td>
+          <td><span class="truncate" title="\${m.subject}">\${m.subject}</span></td>
+          <td><span class="truncate" title="\${m.message}">\${m.message}</span></td>
+        </tr>
+      \`).join('')
+        : '<tr><td colspan="6" class="loading">Sin mensajes aún.</td></tr>';
     }
   </script>
 </body>
