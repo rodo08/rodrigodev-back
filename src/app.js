@@ -15,6 +15,9 @@ const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim());
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
+// Sonda de estado, sin keep-alive: en el plan free de Render el servicio duerme
+// tras 15 min sin tráfico y lo despierta el POST /api/visits que el frontend
+// dispara al cargar la página.
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/chat', chatRouter);
@@ -22,22 +25,6 @@ app.use('/api/visits', visitsRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/cv-downloads', cvDownloadsRouter);
 app.use('/sapeo', sapeoRouter);
-
-const keepAlive = () => {
-  const url = process.env.RENDER_EXTERNAL_URL;
-  if (!url) return;
-
-  const FOURTEEN_MINUTES = 14 * 60 * 1000;
-
-  setInterval(async () => {
-    try {
-      await fetch(`${url}/health`);
-      console.log(`[keep-alive] ping sent to ${url}/health`);
-    } catch (err) {
-      console.error('[keep-alive] ping failed:', err.message);
-    }
-  }, FOURTEEN_MINUTES);
-};
 
 const PORT = process.env.PORT || 3001;
 
@@ -47,7 +34,6 @@ mongoose
     console.log('MongoDB connected');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
-      keepAlive();
     });
   })
   .catch((err) => {

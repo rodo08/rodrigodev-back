@@ -232,6 +232,18 @@ router.get('/', (req, res) => {
   <script>
     let savedPassword = '';
 
+    // Los logs y los mensajes de contacto son texto que escribe cualquiera desde
+    // internet. Al inyectarlos con innerHTML el navegador los interpretaría como
+    // HTML, así que se escapan acá, en el punto de salida: es el render el que
+    // convierte un dato en código, no el guardado.
+    const escapeHtml = (value) =>
+      String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
     const loginBtn = document.getElementById('loginBtn');
     const passInput = document.getElementById('passInput');
     const loginError = document.getElementById('loginError');
@@ -286,9 +298,9 @@ router.get('/', (req, res) => {
         <tr>
           <td>\${i + 1}</td>
           <td><span class="tag">\${new Date(log.createdAt).toLocaleString('es-ES')}</span></td>
-          <td>\${log.country ?? '—'}<br><small style="color:#888">\${log.city ?? ''}</small></td>
-          <td><span class="truncate" title="\${log.message}">\${log.message}</span></td>
-          <td><span class="truncate" title="\${log.response ?? ''}">\${log.response ?? '—'}</span></td>
+          <td>\${escapeHtml(log.country ?? '—')}<br><small style="color:#888">\${escapeHtml(log.city ?? '')}</small></td>
+          <td><span class="truncate" title="\${escapeHtml(log.message)}">\${escapeHtml(log.message)}</span></td>
+          <td><span class="truncate" title="\${escapeHtml(log.response ?? '')}">\${escapeHtml(log.response ?? '—')}</span></td>
         </tr>
       \`).join('')
         : '<tr><td colspan="5" class="loading">Sin registros aún.</td></tr>';
@@ -299,10 +311,10 @@ router.get('/', (req, res) => {
         <tr>
           <td>\${i + 1}</td>
           <td><span class="tag">\${new Date(m.createdAt).toLocaleString('es-ES')}</span></td>
-          <td>\${m.name || '—'}</td>
-          <td>\${m.email}</td>
-          <td><span class="truncate" title="\${m.subject}">\${m.subject}</span></td>
-          <td><span class="truncate" title="\${m.message}">\${m.message}</span></td>
+          <td>\${escapeHtml(m.name || '—')}</td>
+          <td>\${escapeHtml(m.email)}</td>
+          <td><span class="truncate" title="\${escapeHtml(m.subject)}">\${escapeHtml(m.subject)}</span></td>
+          <td><span class="truncate" title="\${escapeHtml(m.message)}">\${escapeHtml(m.message)}</span></td>
         </tr>
       \`).join('')
         : '<tr><td colspan="6" class="loading">Sin mensajes aún.</td></tr>';
